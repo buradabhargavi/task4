@@ -1,66 +1,61 @@
-var form = document.getElementById('addForm');
-var itemList = document.getElementById('items');
-
-//form submit event
-
-form.addEventListener('submit',
-  addItem);
-
-//delete event 
-itemList.addEventListener('click', removeItem);
-//addItem
-
-function addItem(e) {
-  e.preventDefault();
-
-  //get input value
-  var newItem = document.getElementById('item').value;
-
-  //create new li element
-
-  var li = document.createElement('li');
-
-  // Add class
-
-  li.className = 'list-group-item'
-
-  //add text node with input value
-
-  li.appendChild(document.createTextNode(newItem));
-
-  //Create a delete button 
-  var deleteBtn = document.createElement('button');
-
-  //add classes to delete button 
-  deleteBtn.className = 'btn btn-danger btn-sm float-right delete';
-
-  //Append Text node to delete 
-  deleteBtn.appendChild(document.createTextNode('X'));
-  //append button to li
-  li.appendChild(deleteBtn);
-  //append li to list 
-  itemList.appendChild(li);
+var form=document.getElementById('addForm');
+var itemList=document.getElementById('items');	
+var filter=document.getElementById('filter');
 
 
-  // create editBtn
-  var editBtn = document.createElement('button');
-  //add class to edit button 
-  editBtn.className = 'btn btn-success btn-sm float-right edit'
-  //append text node to edit 
-  editBtn.appendChild(document.createTextNode('edit'));
-  //append editbutton to li
-  li.appendChild(editBtn);
-  // append li to list 
-  itemList.appendChild(li);
+form.addEventListener('submit',addItem);	
+itemList.addEventListener('click',removeItem);	
+filter.addEventListener('keyup',filterItems);
+
+function addItem(e){	
+    e.preventDefault();	    
+    var newItem=document.getElementById('item').value;	   
+    var description=document.getElementById('description').value;
+    //create new li	    
+    var li=document.createElement('li');	    
+    //Add class	
+    li.className='list-group-item';	   
+   //Add text 	  
+   li.appendChild(document.createTextNode(newItem));	   
+   li.appendChild(document.createTextNode(description));
+
+
+
+
+var deleteBtn=document.createElement('button')	  
+var editBtn=document.createElement('button');
+
+deleteBtn.className='btn btn-danger btn-sm float-right delete';	  
+editBtn.className='btn btn-primary btn-sm float-right edit'
+   
+deleteBtn.appendChild(document.createTextNode('X'));	   
+editBtn.appendChild(document.createTextNode('EDIT'));	   
+   
+li.appendChild(deleteBtn);	   
+li.appendChild(editBtn);	
+   
+itemList.appendChild(li);	
+   	   
+}	
+function removeItem(e){
+    if(e.target.classList.contains('delete')){	    
+        if(confirm('are you sure?')){	        
+            var li=e.target.parentElement;	           
+            itemList.removeChild(li);	           
+        }	        }
+    }	    
+
+function filterItems(e){
+    var text=e.target.value.toLowerCase();
+    var items=itemList.getElementsByTagName('li');
+    Array.from(items).forEach(function(item){
+var itemName=item.textContent;
+
+if(itemName.toLowerCase().indexOf(text)!=-1){
+item.style.display='block'
+}else{
+    item.style.display='none'
 }
-
-//removeItem
-function removeItem(e) {
-  if (e.target.classList.contains('delete')) {
-    if (confirm('Are you Sure?')) {
-      var li = e.target.parentElement;
-      itemList.removeChild(li);
-    }
-  }
+    });
 
 }
